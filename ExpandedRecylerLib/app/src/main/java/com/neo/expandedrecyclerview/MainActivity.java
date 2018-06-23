@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i=0;i<10;i++)
         {
             ParentItemModel parentItemModel=new ParentItemModel();
-            parentItemModel.setName(""+i);
+            parentItemModel.setName("Parent "+i);
             parentItemModels.add(parentItemModel);
         }
         RecyclerView recyclerView=findViewById(R.id.recycle_view);

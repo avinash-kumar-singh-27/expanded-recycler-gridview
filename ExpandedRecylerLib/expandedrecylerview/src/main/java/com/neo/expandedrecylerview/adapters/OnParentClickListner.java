@@ -205,107 +205,10 @@
 
 package com.neo.expandedrecylerview.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
-
-import com.neo.expandedrecylerview.core.IExpandData;
-import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by matrix on 6/23/2018.
  */
 
-abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHolder> {
-    protected RecyclerView recyclerView;
-    protected List<IExpandData> iExpandDatas;
-
-
-    private OnParentClickListner onParentClickLisnter = new OnParentClickListner() {
-        @Override
-        public void onParentClick(int position) {
-            onParentClicked(position);
-        }
-    };
-
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
-        setLayoutManager();
-    }
-
-    public abstract void setLayoutManager();
-
-    public abstract List<IExpandData> getData();
-
-    public abstract int getItemViewType(int position);
-
-    public abstract BaseExpandedViewHolder getChildLoadingView(ViewGroup parent);
-
-    public abstract BaseExpandedViewHolder getChildView(ViewGroup parent);
-
-    public abstract BaseExpandedViewHolder getParentView(ViewGroup parent);
-
-    public abstract void setParentViewData(BaseExpandedViewHolder parentViewHolder, int position);
-
-    public abstract void setChildLoadingViewData(BaseExpandedViewHolder childLoadingViewHolder, int position);
-
-    public abstract void setChildViewData(BaseExpandedViewHolder childViewHolder, int position);
-
-    public abstract void onParentClicked(int position);
-
-
-    @NonNull
-    @Override
-    public BaseExpandedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case ExpandedRecyclerConstant.CHILD_LOADING_VIEW_TYPE:
-                return getChildLoadingView(parent);
-            case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
-                return getChildView(parent);
-            default:
-                return getParentView(parent);
-        }
-
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull BaseExpandedViewHolder holder, int position) {
-        int viewType = getItemViewType(position);
-        switch (viewType) {
-            case ExpandedRecyclerConstant.CHILD_LOADING_VIEW_TYPE:
-                setChildLoadingViewData(holder, position);
-                break;
-
-            case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
-                setChildViewData(holder, position);
-                break;
-            default:
-                holder.onParentClickLisnter = onParentClickLisnter;
-                setParentViewData(holder, position);
-
-                break;
-        }
-    }
-
-    private void init() {
-        List<IExpandData> datas = getData();
-        iExpandDatas = new ArrayList<>();
-        if (datas != null && !datas.isEmpty()) {
-            iExpandDatas.addAll(datas);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        if (iExpandDatas == null) {
-            init();
-            return iExpandDatas.size();
-        }
-        return iExpandDatas.size();
-    }
+interface OnParentClickListner {
+    void onParentClick(int position);
 }

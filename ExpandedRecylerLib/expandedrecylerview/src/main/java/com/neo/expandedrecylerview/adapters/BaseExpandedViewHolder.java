@@ -213,15 +213,19 @@ import android.view.View;
  */
 
 public abstract class BaseExpandedViewHolder extends RecyclerView.ViewHolder {
-   private View view;
+    private View view;
+    protected OnParentClickListner onParentClickLisnter;
+
     public BaseExpandedViewHolder(View itemView) {
         super(itemView);
-        this.view=itemView;
+        this.view = itemView;
         initWidgets(itemView);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (onParentClickLisnter != null) {
+                    onParentClickLisnter.onParentClick(getAdapterPosition());
+                }
             }
         });
     }
