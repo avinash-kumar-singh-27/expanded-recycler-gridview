@@ -205,6 +205,7 @@
 
 package com.neo.expandedrecyclerview;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -221,7 +222,15 @@ import java.util.List;
  */
 
 public class ExpandedAdapter extends ExpandedGridAdapter {
+    @Override
+    public void onParentClicked(int position) {
+        Log.i("Clicked On",""+position);
+    }
 
+    @Override
+    public int getColumnCount() {
+        return 2;
+    }
 
     private List<IExpandData> parentItemModels;
 

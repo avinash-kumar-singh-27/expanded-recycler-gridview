@@ -207,15 +207,35 @@ package com.neo.expandedrecylerview.adapters;
 
 import android.support.v7.widget.GridLayoutManager;
 
+import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
+
 /**
  * Created by matrix on 6/23/2018.
  */
 
 public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
+    public abstract int getColumnCount();
+
     @Override
     public void setLayoutManager() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(recyclerView.getContext(), 2);
+        final int columnNumber = getColumnCount();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(recyclerView.getContext(), columnNumber);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int viewType = getItemViewType(position);
+                switch (viewType) {
+                    case ExpandedRecyclerConstant.CHILD_LOADING_VIEW_TYPE:
+                    case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
+                        return columnNumber;
+                    default:
+                        return 1;
+
+                }
+            }
+        });
         recyclerView.setLayoutManager(gridLayoutManager);
+
     }
 
 }
