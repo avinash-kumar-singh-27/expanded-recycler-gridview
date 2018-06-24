@@ -222,12 +222,22 @@ import java.util.List;
 abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHolder> {
     protected RecyclerView recyclerView;
     protected List<IExpandData> iExpandDatas;
+    private int selectedParentIndex = -1;
 
+    protected void onChildDataUpdate(List<IExpandData> childData) {
+        if (iExpandDatas != null) {
+            iExpandDatas.addAll(selectedParentIndex, childData);
+            onListUpdate(iExpandDatas);
+
+        }
+    }
 
     private OnParentClickListner onParentClickLisnter = new OnParentClickListner() {
         @Override
         public void onParentClick(int position) {
+            selectedParentIndex = position;
             onParentClicked(position);
+            notifyParentClicked(selectedParentIndex);
         }
     };
 
@@ -242,7 +252,7 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
 
     public abstract List<IExpandData> getData();
 
-    public abstract int getItemViewType(int position);
+
 
     public abstract BaseExpandedViewHolder getChildLoadingView(ViewGroup parent);
 
@@ -258,6 +268,9 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
 
     public abstract void onParentClicked(int position);
 
+    public abstract void onListUpdate(List<IExpandData> iExpandDatas);
+
+    abstract void notifyParentClicked(int position);
 
     @NonNull
     @Override

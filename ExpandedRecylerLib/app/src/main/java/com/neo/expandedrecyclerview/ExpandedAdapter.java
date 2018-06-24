@@ -223,6 +223,11 @@ import java.util.List;
 
 public class ExpandedAdapter extends ExpandedGridAdapter {
     @Override
+    public void onListUpdate(List<IExpandData> iExpandDatas) {
+
+    }
+
+    @Override
     public void onParentClicked(int position) {
         Log.i("Clicked On",""+position);
     }
@@ -239,14 +244,11 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
         return parentItemModels;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return 0;
-    }
 
     @Override
     public BaseExpandedViewHolder getChildLoadingView(ViewGroup parent) {
-        return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parent_layout, parent, false);
+        return new ChildLoadView(view);
     }
 
     @Override
@@ -268,7 +270,7 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
 
     @Override
     public void setChildLoadingViewData(BaseExpandedViewHolder childLoadingViewHolder, int position) {
-
+        ((ChildLoadView) childLoadingViewHolder).setData("Loading data");
     }
 
     @Override
@@ -278,6 +280,25 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
 
     public void setData(List<IExpandData> parentItemModels) {
         this.parentItemModels = parentItemModels;
+    }
+
+    class ChildLoadView extends BaseExpandedViewHolder {
+        TextView textView;
+
+        public ChildLoadView(View itemView) {
+            super(itemView);
+
+        }
+
+        @Override
+        public void initWidgets(View view) {
+            textView = itemView.findViewById(R.id.parent_name);
+        }
+
+        public void setData(String data) {
+
+            textView.setText(data);
+        }
     }
 
     class Parent extends BaseExpandedViewHolder {
