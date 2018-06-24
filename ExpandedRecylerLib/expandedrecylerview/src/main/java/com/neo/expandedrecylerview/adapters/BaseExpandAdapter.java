@@ -241,6 +241,14 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
         }
     };
 
+
+    private OnParentClickListner onParentClickLisnter = new OnParentClickListner() {
+        @Override
+        public void onParentClick(int position) {
+            onParentClicked(position);
+        }
+    };
+
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
