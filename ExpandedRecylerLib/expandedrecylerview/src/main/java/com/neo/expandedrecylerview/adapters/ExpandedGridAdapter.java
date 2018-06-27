@@ -248,7 +248,7 @@ public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
         if (currentExpandedIndex != -1) {
             notifyItemRemoved(currentExpandedIndex);
             currentExpandedIndex = -1;
-          //  notifyDataSetChanged();
+            notifyDataSetChanged();
             return;
         }
         int columnCount = getColumnCount();
@@ -262,16 +262,15 @@ public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
 
         if (currentExpandedIndex == -1) {
             currentExpandedIndex = startIndex;
-            notifyItemInserted(startIndex);
+            notifyDataSetChanged();
         }
-//notifyDataSetChanged();
     }
 
     @Override
     final public int getItemViewType(int position) {
         if (position == currentExpandedIndex) {
             return ExpandedRecyclerConstant.CHILD_VIEW_TYPE;
-        } else if (updatedPosition(position) <iExpandDatas.size()) {
+        } else if (updatedPosition(position) < iExpandDatas.size()) {
             return ExpandedRecyclerConstant.PARENT_VIEW_TYPE;
         }
         return ExpandedRecyclerConstant.EMPTY_VIEW_TYPE;
@@ -284,7 +283,7 @@ public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
         if (blankViewSize != 0) {
             blankViewSize = getColumnCount() - blankViewSize;
         }
-        return blankViewSize+1;
+        return blankViewSize + 1;
     }
 
     private int updatedPosition(int position) {
