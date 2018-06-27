@@ -215,6 +215,6 @@ import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
  public final  class ChildLoadModel implements IInternalExpandData {
     @Override
     public int getViewType() {
-        return ExpandedRecyclerConstant.CHILD_LOADING_VIEW_TYPE;
+        return ExpandedRecyclerConstant.PARENT_VIEW_TYPE;
     }
 }

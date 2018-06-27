@@ -212,5 +212,6 @@ package com.neo.expandedrecylerview.utility;
 public final class ExpandedRecyclerConstant {
     private ExpandedRecyclerConstant(){}
     public static final int CHILD_VIEW_TYPE=1001;
-    public static final int CHILD_LOADING_VIEW_TYPE=1002;
+    public static final int EMPTY_VIEW_TYPE=1003;
+    public static final int PARENT_VIEW_TYPE=1004;
 }
