@@ -207,6 +207,7 @@ package com.neo.expandedrecylerview.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.neo.expandedrecylerview.core.IExpandData;
@@ -223,6 +224,7 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
     protected RecyclerView recyclerView;
     protected List<IExpandData> iExpandDatas;
     private int selectedParentIndex = -1;
+    private int size = 0;
 
     protected void onChildDataUpdate(List<IExpandData> childData) {
         if (iExpandDatas != null) {
@@ -252,9 +254,8 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
 
     public abstract List<IExpandData> getData();
 
+    abstract int getEmptyViews();
 
-
-    public abstract BaseExpandedViewHolder getChildLoadingView(ViewGroup parent);
 
     public abstract BaseExpandedViewHolder getChildView(ViewGroup parent);
 
@@ -262,7 +263,6 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
 
     public abstract void setParentViewData(BaseExpandedViewHolder parentViewHolder, int position);
 
-    public abstract void setChildLoadingViewData(BaseExpandedViewHolder childLoadingViewHolder, int position);
 
     public abstract void setChildViewData(BaseExpandedViewHolder childViewHolder, int position);
 
@@ -275,11 +275,13 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
     @NonNull
     @Override
     public BaseExpandedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.e("CALLED","CREATE "+viewType);
         switch (viewType) {
-            case ExpandedRecyclerConstant.CHILD_LOADING_VIEW_TYPE:
-                return getChildLoadingView(parent);
+
             case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
                 return getChildView(parent);
+            case ExpandedRecyclerConstant.EMPTY_VIEW_TYPE:
+                return getParentView(parent);
             default:
                 return getParentView(parent);
         }
@@ -289,13 +291,15 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
     @Override
     public void onBindViewHolder(@NonNull BaseExpandedViewHolder holder, int position) {
         int viewType = getItemViewType(position);
+        Log.e("CALLED",""+viewType);
         switch (viewType) {
-            case ExpandedRecyclerConstant.CHILD_LOADING_VIEW_TYPE:
-                setChildLoadingViewData(holder, position);
-                break;
+
 
             case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
                 setChildViewData(holder, position);
+                break;
+            case ExpandedRecyclerConstant.EMPTY_VIEW_TYPE:
+               // setChildViewData(holder, position);
                 break;
             default:
                 holder.onParentClickLisnter = onParentClickLisnter;
@@ -315,10 +319,12 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedViewHo
 
     @Override
     public int getItemCount() {
+
         if (iExpandDatas == null) {
             init();
-            return iExpandDatas.size();
+            size = iExpandDatas.size();
+            size += getEmptyViews();
         }
-        return iExpandDatas.size();
+        return size;
     }
 }

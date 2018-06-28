@@ -234,7 +234,7 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
 
     @Override
     public int getColumnCount() {
-        return 2;
+        return 3;
     }
 
     private List<IExpandData> parentItemModels;
@@ -245,16 +245,12 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
     }
 
 
-    @Override
-    public BaseExpandedViewHolder getChildLoadingView(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parent_layout, parent, false);
-        return new ChildLoadView(view);
-    }
+
 
     @Override
     public BaseExpandedViewHolder getChildView(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parent_layout, parent, false);
-        return new Parent(view);
+        return new ChildLoadView(view);
     }
 
     @Override
@@ -268,14 +264,11 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
         ((Parent) parentViewHolder).setData(iExpandDatas.get(position));
     }
 
-    @Override
-    public void setChildLoadingViewData(BaseExpandedViewHolder childLoadingViewHolder, int position) {
-        ((ChildLoadView) childLoadingViewHolder).setData("Loading data");
-    }
+
 
     @Override
     public void setChildViewData(BaseExpandedViewHolder childViewHolder, int position) {
-
+        ((ChildLoadView) childViewHolder).setData("Loading data");
     }
 
     public void setData(List<IExpandData> parentItemModels) {
