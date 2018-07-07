@@ -187,7 +187,7 @@
  *       same "printed page" as the copyright notice for easier
  *       identification within third-party archives.
  *
- *    Copyright [yyyy] [name of copyright owner]
+ *    Copyright 2018 Avinash Kumar Singh
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -205,30 +205,39 @@
 
 package com.neo.expandedrecyclerview;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 
-import com.neo.expandedrecylerview.core.IExpandData;
+import com.neo.expandedrecylerview.model.IExpandData;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    final int columnNo = 3;
+    final int itemNo = 5;
+    private RecyclerView recyclerView;
+    private ExpandedAdapter expandedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<IExpandData> parentItemModels=new ArrayList<>();
-        for (int i=0;i<3;i++)
-        {
-            ParentItemModel parentItemModel=new ParentItemModel();
-            parentItemModel.setName("Parent "+i);
+        recyclerView = findViewById(R.id.recycle_view);
+        expandedAdapter = new ExpandedAdapter();
+        expandedAdapter.setColumnNumber(columnNo);
+        recyclerView.setAdapter(expandedAdapter);
+        fillDataAndNotifyAdapter();
+    }
+
+    private void fillDataAndNotifyAdapter() {
+        ArrayList<IExpandData> parentItemModels = new ArrayList<>();
+        for (int i = 0; i < itemNo; i++) {
+            ParentItemModel parentItemModel = new ParentItemModel();
+            parentItemModel.setName("Parent " + i);
             parentItemModels.add(parentItemModel);
         }
-        RecyclerView recyclerView=findViewById(R.id.recycle_view);
-        ExpandedAdapter expandedAdapter=new ExpandedAdapter();
         expandedAdapter.setData(parentItemModels);
-        recyclerView.setAdapter(expandedAdapter);
+        expandedAdapter.notifyDataSetChanged();
     }
 }

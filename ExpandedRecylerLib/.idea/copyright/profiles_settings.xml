@@ -1,8 +1,0 @@
-<component name="CopyrightManager">
-  <settings default="Copy">
-    <module2copyright>
-      <element module="Tests" copyright="Copy" />
-      <element module="Project Files" copyright="Copy" />
-    </module2copyright>
-  </settings>
-</component>

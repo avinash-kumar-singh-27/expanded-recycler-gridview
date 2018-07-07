@@ -187,7 +187,7 @@
  *       same "printed page" as the copyright notice for easier
  *       identification within third-party archives.
  *
- *    Copyright [yyyy] [name of copyright owner]
+ *    Copyright 2018 Avinash Kumar Singh
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -211,30 +211,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.neo.expandedrecylerview.adapters.BaseExpandedViewHolder;
+import com.neo.expandedrecylerview.adapters.BaseExpandedGridViewHolder;
 import com.neo.expandedrecylerview.adapters.ExpandedGridAdapter;
-import com.neo.expandedrecylerview.core.IExpandData;
+import com.neo.expandedrecylerview.model.IExpandData;
 
 import java.util.List;
 
-/**
- * Created by matrix on 6/23/2018.
- */
 
 public class ExpandedAdapter extends ExpandedGridAdapter {
-    @Override
-    public void onListUpdate(List<IExpandData> iExpandDatas) {
+    private int columnNumber;
 
+    public void setColumnNumber(int columnNumber) {
+        this.columnNumber = columnNumber;
     }
+
+
 
     @Override
     public void onParentClicked(int position) {
-        Log.i("Clicked On",""+position);
+        Log.i("Clicked On", "" + position);
     }
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return columnNumber;
     }
 
     private List<IExpandData> parentItemModels;
@@ -245,47 +245,44 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
     }
 
 
-
-
     @Override
-    public BaseExpandedViewHolder getChildView(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parent_layout, parent, false);
-        return new ChildLoadView(view);
+    public BaseExpandedGridViewHolder getChildView(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.child_layout, parent, false);
+        return new ChildLoadGridView(view);
     }
 
     @Override
-    public BaseExpandedViewHolder getParentView(ViewGroup parent) {
+    public BaseExpandedGridViewHolder getParentView(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parent_layout, parent, false);
         return new Parent(view);
     }
 
     @Override
-    public void setParentViewData(BaseExpandedViewHolder parentViewHolder, int position) {
+    public void setParentViewData(BaseExpandedGridViewHolder parentViewHolder, int position) {
         ((Parent) parentViewHolder).setData(iExpandDatas.get(position));
     }
 
 
-
     @Override
-    public void setChildViewData(BaseExpandedViewHolder childViewHolder, int position) {
-        ((ChildLoadView) childViewHolder).setData("Loading data");
+    public void setChildViewData(BaseExpandedGridViewHolder childViewHolder, int position) {
+        ((ChildLoadGridView) childViewHolder).setData("Detail view of position : "+position);
     }
 
     public void setData(List<IExpandData> parentItemModels) {
         this.parentItemModels = parentItemModels;
     }
 
-    class ChildLoadView extends BaseExpandedViewHolder {
+    class ChildLoadGridView extends BaseExpandedGridViewHolder {
         TextView textView;
 
-        public ChildLoadView(View itemView) {
+        public ChildLoadGridView(View itemView) {
             super(itemView);
 
         }
 
         @Override
         public void initWidgets(View view) {
-            textView = itemView.findViewById(R.id.parent_name);
+            textView = itemView.findViewById(R.id.child_data);
         }
 
         public void setData(String data) {
@@ -294,7 +291,7 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
         }
     }
 
-    class Parent extends BaseExpandedViewHolder {
+    class Parent extends BaseExpandedGridViewHolder {
         TextView textView;
 
         public Parent(View itemView) {

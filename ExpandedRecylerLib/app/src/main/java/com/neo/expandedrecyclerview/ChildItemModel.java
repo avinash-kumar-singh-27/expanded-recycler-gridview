@@ -187,7 +187,7 @@
  *       same "printed page" as the copyright notice for easier
  *       identification within third-party archives.
  *
- *    Copyright [yyyy] [name of copyright owner]
+ *    Copyright 2018 Avinash Kumar Singh
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -205,11 +205,9 @@
 
 package com.neo.expandedrecyclerview;
 
-import com.neo.expandedrecylerview.core.IExpandData;
+import com.neo.expandedrecylerview.model.IExpandData;
 
-/**
- * Created by matrix on 6/24/2018.
- */
+
 
 public class ChildItemModel implements IExpandData {
     public String getChildName() {

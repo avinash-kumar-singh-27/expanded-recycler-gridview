@@ -187,7 +187,7 @@
  *       same "printed page" as the copyright notice for easier
  *       identification within third-party archives.
  *
- *    Copyright [yyyy] [name of copyright owner]
+ *    Copyright 2018 Avinash Kumar Singh
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -202,12 +202,16 @@
  *    limitations under the License.
  *
  */
+package com.neo.expandedrecylerview.utility;
 
-package com.neo.expandedrecylerview.core;
+public final class Utility {
+    private Utility() {
+    }
 
-/**
- * Created by matrix on 6/23/2018.
- */
-
-public interface IExpandData {
+    public static int updatedIndex(int expandedPosition, int currentIndex) {
+        if (expandedPosition != -1 && currentIndex > expandedPosition) {
+            return --currentIndex;
+        }
+        return currentIndex;
+    }
 }

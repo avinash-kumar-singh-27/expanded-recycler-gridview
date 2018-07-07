@@ -187,7 +187,7 @@
  *       same "printed page" as the copyright notice for easier
  *       identification within third-party archives.
  *
- *    Copyright [yyyy] [name of copyright owner]
+ *    Copyright 2018 Avinash Kumar Singh
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -205,30 +205,108 @@
 
 package com.neo.expandedrecylerview.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
-/**
- * Created by matrix on 6/23/2018.
- */
+import com.neo.expandedrecylerview.model.IExpandData;
+import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
+import com.neo.expandedrecylerview.utility.Utility;
 
-public abstract class BaseExpandedViewHolder extends RecyclerView.ViewHolder {
-    private View view;
-    protected OnParentClickListner onParentClickLisnter;
+import java.util.ArrayList;
+import java.util.List;
 
-    public BaseExpandedViewHolder(View itemView) {
-        super(itemView);
-        this.view = itemView;
-        initWidgets(itemView);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onParentClickLisnter != null) {
-                    onParentClickLisnter.onParentClick(getAdapterPosition());
-                }
-            }
-        });
+
+abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedGridViewHolder> {
+    protected int currentExpandedIndex = -1;
+    protected RecyclerView recyclerView;
+    protected List<IExpandData> iExpandDatas;
+    private int selectedParentIndex = -1;
+    private int size = 0;
+
+    private OnParentClickListener onParentClickLisnter = new OnParentClickListener() {
+        @Override
+        public void onParentClick(int position) {
+            selectedParentIndex = position;
+            onParentClicked(position);
+            notifyParentClicked(selectedParentIndex);
+        }
+    };
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+        setLayoutManager();
     }
 
-    public abstract void initWidgets(View view);
+    public abstract void setLayoutManager();
+
+    public abstract List<IExpandData> getData();
+
+    abstract int getEmptyViews();
+
+    public abstract BaseExpandedGridViewHolder getChildView(ViewGroup parent);
+
+    public abstract BaseExpandedGridViewHolder getParentView(ViewGroup parent);
+
+    public abstract void setParentViewData(BaseExpandedGridViewHolder parentViewHolder, int position);
+
+    abstract BaseExpandedGridViewHolder getEmptyView(View parent);
+
+    public abstract void setChildViewData(BaseExpandedGridViewHolder childViewHolder, int position);
+
+    public abstract void onParentClicked(int position);
+
+    abstract void notifyParentClicked(int position);
+
+    @NonNull
+    @Override
+    public BaseExpandedGridViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
+                return getChildView(parent);
+            case ExpandedRecyclerConstant.EMPTY_VIEW_TYPE:
+                View view = new View(parent.getContext());
+                return getEmptyView(view);
+            default:
+                return getParentView(parent);
+        }
+
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull BaseExpandedGridViewHolder holder, int position) {
+        int viewType = getItemViewType(position);
+        int updatedPosition = Utility.updatedIndex(currentExpandedIndex, position);
+        switch (viewType) {
+            case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
+                setChildViewData(holder, selectedParentIndex);
+                break;
+            case ExpandedRecyclerConstant.EMPTY_VIEW_TYPE:
+                break;
+            default:
+                holder.onParentClickListener = onParentClickLisnter;
+                setParentViewData(holder, updatedPosition);
+                break;
+        }
+
+    }
+
+    private void init() {
+        List<IExpandData> datas = getData();
+        iExpandDatas = new ArrayList<>();
+        if (datas != null && !datas.isEmpty()) {
+            iExpandDatas.addAll(datas);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        init();
+        size = iExpandDatas.size();
+        size += getEmptyViews();
+        return size;
+    }
 }

@@ -187,7 +187,7 @@
  *       same "printed page" as the copyright notice for easier
  *       identification within third-party archives.
  *
- *    Copyright [yyyy] [name of copyright owner]
+ *    Copyright 2018 Avinash Kumar Singh
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -203,15 +203,29 @@
  *
  */
 
-package com.neo.expandedrecylerview.utility;
+package com.neo.expandedrecylerview.adapters;
 
-/**
- * Created by matrix on 6/23/2018.
- */
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-public final class ExpandedRecyclerConstant {
-    private ExpandedRecyclerConstant(){}
-    public static final int CHILD_VIEW_TYPE=1001;
-    public static final int EMPTY_VIEW_TYPE=1003;
-    public static final int PARENT_VIEW_TYPE=1004;
+
+public abstract class BaseExpandedGridViewHolder extends RecyclerView.ViewHolder {
+    private View view;
+    protected OnParentClickListener onParentClickListener;
+
+    public BaseExpandedGridViewHolder(View itemView) {
+        super(itemView);
+        this.view = itemView;
+        initWidgets(itemView);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onParentClickListener != null) {
+                    onParentClickListener.onParentClick(getAdapterPosition());
+                }
+            }
+        });
+    }
+
+    public abstract void initWidgets(View view);
 }
