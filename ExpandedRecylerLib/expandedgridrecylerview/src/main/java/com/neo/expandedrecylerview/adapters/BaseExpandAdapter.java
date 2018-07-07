@@ -282,7 +282,7 @@ abstract class BaseExpandAdapter extends RecyclerView.Adapter<BaseExpandedGridVi
         int updatedPosition = Utility.updatedIndex(currentExpandedIndex, position);
         switch (viewType) {
             case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
-                setChildViewData(holder, updatedPosition);
+                setChildViewData(holder, selectedParentIndex);
                 break;
             case ExpandedRecyclerConstant.EMPTY_VIEW_TYPE:
                 break;

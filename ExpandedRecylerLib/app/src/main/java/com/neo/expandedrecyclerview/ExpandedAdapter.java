@@ -265,7 +265,7 @@ public class ExpandedAdapter extends ExpandedGridAdapter {
 
     @Override
     public void setChildViewData(BaseExpandedGridViewHolder childViewHolder, int position) {
-        ((ChildLoadGridView) childViewHolder).setData("Loading data");
+        ((ChildLoadGridView) childViewHolder).setData("Detail view of position : "+position);
     }
 
     public void setData(List<IExpandData> parentItemModels) {
