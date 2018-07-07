@@ -203,32 +203,18 @@
  *
  */
 
-package com.neo.expandedrecyclerview;
+package com.neo.expandedrecylerview.model;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import com.neo.expandedrecylerview.core.IInternalExpandData;
+import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
 
-import com.neo.expandedrecylerview.core.IExpandData;
+/**
+ * Created by matrix on 6/25/2018.
+ */
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
-
+public class EmptyViewModel  implements IInternalExpandData {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ArrayList<IExpandData> parentItemModels=new ArrayList<>();
-        for (int i=0;i<3;i++)
-        {
-            ParentItemModel parentItemModel=new ParentItemModel();
-            parentItemModel.setName("Parent "+i);
-            parentItemModels.add(parentItemModel);
-        }
-        RecyclerView recyclerView=findViewById(R.id.recycle_view);
-        ExpandedAdapter expandedAdapter=new ExpandedAdapter();
-        expandedAdapter.setData(parentItemModels);
-        recyclerView.setAdapter(expandedAdapter);
+    public int getViewType() {
+        return ExpandedRecyclerConstant.EMPTY_VIEW_TYPE;
     }
 }

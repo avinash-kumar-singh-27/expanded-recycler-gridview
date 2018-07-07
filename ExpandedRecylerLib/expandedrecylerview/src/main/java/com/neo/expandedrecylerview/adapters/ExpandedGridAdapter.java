@@ -207,7 +207,6 @@ package com.neo.expandedrecylerview.adapters;
 
 import android.support.v7.widget.GridLayoutManager;
 
-import com.neo.expandedrecylerview.model.ChildLoadModel;
 import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
 
 /**
@@ -215,6 +214,8 @@ import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
  */
 
 public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
+    private int currentExpandedIndex = -1;
+
     public abstract int getColumnCount();
 
     @Override
@@ -224,11 +225,13 @@ public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
+
                 int viewType = getItemViewType(position);
                 switch (viewType) {
-                    case ExpandedRecyclerConstant.CHILD_LOADING_VIEW_TYPE:
                     case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
                         return columnNumber;
+                    case ExpandedRecyclerConstant.EMPTY_VIEW_TYPE:
+                        return 1;
                     default:
                         return 1;
 
@@ -239,14 +242,13 @@ public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
 
     }
 
-    private int currentExpandedIndex = -1;
 
     @Override
     final void notifyParentClicked(int position) {
         if (currentExpandedIndex != -1) {
-            iExpandDatas.remove(currentExpandedIndex);
             notifyItemRemoved(currentExpandedIndex);
             currentExpandedIndex = -1;
+            notifyDataSetChanged();
             return;
         }
         int columnCount = getColumnCount();
@@ -259,20 +261,35 @@ public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
         startIndex = startIndex + columnCount;
 
         if (currentExpandedIndex == -1) {
-            ChildLoadModel childLoadModel = new ChildLoadModel();
-            iExpandDatas.add(startIndex, childLoadModel);
-            onListUpdate(iExpandDatas);
             currentExpandedIndex = startIndex;
-            notifyItemInserted(startIndex);
+            notifyDataSetChanged();
         }
-
     }
 
     @Override
     final public int getItemViewType(int position) {
         if (position == currentExpandedIndex) {
-            return ((ChildLoadModel) iExpandDatas.get(position)).getViewType();
+            return ExpandedRecyclerConstant.CHILD_VIEW_TYPE;
+        } else if (updatedPosition(position) < iExpandDatas.size()) {
+            return ExpandedRecyclerConstant.PARENT_VIEW_TYPE;
         }
-        return 0;
+        return ExpandedRecyclerConstant.EMPTY_VIEW_TYPE;
+    }
+
+    @Override
+    int getEmptyViews() {
+        int size = iExpandDatas.size();
+        int blankViewSize = size % getColumnCount();
+        if (blankViewSize != 0) {
+            blankViewSize = getColumnCount() - blankViewSize;
+        }
+        return blankViewSize + 1;
+    }
+
+    private int updatedPosition(int position) {
+        if (currentExpandedIndex != -1 && position > currentExpandedIndex) {
+            return position--;
+        }
+        return position;
     }
 }
