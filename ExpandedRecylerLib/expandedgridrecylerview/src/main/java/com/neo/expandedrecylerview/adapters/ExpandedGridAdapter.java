@@ -203,15 +203,93 @@
  *
  */
 
-package com.neo.expandedrecylerview.utility;
+package com.neo.expandedrecylerview.adapters;
 
-/**
- * Created by matrix on 6/23/2018.
- */
+import android.support.v7.widget.GridLayoutManager;
+import android.view.View;
 
-public final class ExpandedRecyclerConstant {
-    private ExpandedRecyclerConstant(){}
-    public static final int CHILD_VIEW_TYPE=1001;
-    public static final int EMPTY_VIEW_TYPE=1003;
-    public static final int PARENT_VIEW_TYPE=1004;
+import com.neo.expandedrecylerview.utility.ExpandedRecyclerConstant;
+import com.neo.expandedrecylerview.utility.Utility;
+
+
+public abstract class ExpandedGridAdapter extends BaseExpandAdapter {
+
+    public abstract int getColumnCount();
+
+    @Override
+    public void setLayoutManager() {
+        final int columnNumber = getColumnCount();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(recyclerView.getContext(), columnNumber);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+                int viewType = getItemViewType(position);
+                switch (viewType) {
+                    case ExpandedRecyclerConstant.CHILD_VIEW_TYPE:
+                        return columnNumber;
+                    case ExpandedRecyclerConstant.EMPTY_VIEW_TYPE:
+                        return 1;
+                    default:
+                        return 1;
+
+                }
+            }
+        });
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+    }
+
+
+    @Override
+    final void notifyParentClicked(int position) {
+        if (currentExpandedIndex != -1) {
+            notifyItemRemoved(currentExpandedIndex);
+            currentExpandedIndex = -1;
+            notifyDataSetChanged();
+            return;
+        }
+        int columnCount = getColumnCount();
+        int startIndex = position % columnCount;
+        if (startIndex == 0) {
+            startIndex = position;
+        } else {
+            startIndex = position - startIndex;
+        }
+        startIndex = startIndex + columnCount;
+
+        if (currentExpandedIndex == -1) {
+            currentExpandedIndex = startIndex;
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    final public int getItemViewType(int position) {
+        if (position == currentExpandedIndex) {
+            return ExpandedRecyclerConstant.CHILD_VIEW_TYPE;
+        } else if (Utility.updatedIndex(currentExpandedIndex, position) < (iExpandDatas.size())) {
+            return ExpandedRecyclerConstant.PARENT_VIEW_TYPE;
+        }
+        return ExpandedRecyclerConstant.EMPTY_VIEW_TYPE;
+    }
+
+    @Override
+    final int getEmptyViews() {
+        int size = iExpandDatas.size();
+        int blankViewSize = size % getColumnCount();
+        if (blankViewSize != 0) {
+            blankViewSize = getColumnCount() - blankViewSize;
+        }
+        return blankViewSize + 1;
+    }
+
+    @Override
+    final BaseExpandedGridViewHolder getEmptyView(View parent) {
+        return new BaseExpandedGridViewHolder(parent) {
+            @Override
+            public void initWidgets(View view) {
+            }
+        };
+    }
 }

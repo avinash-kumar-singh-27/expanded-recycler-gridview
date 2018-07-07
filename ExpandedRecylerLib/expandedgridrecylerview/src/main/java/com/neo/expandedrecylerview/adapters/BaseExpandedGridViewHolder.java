@@ -203,11 +203,29 @@
  *
  */
 
-package com.neo.expandedrecylerview.core;
+package com.neo.expandedrecylerview.adapters;
 
-/**
- * Created by matrix on 6/23/2018.
- */
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-public interface IBaseExpandAdapter {
+
+public abstract class BaseExpandedGridViewHolder extends RecyclerView.ViewHolder {
+    private View view;
+    protected OnParentClickListener onParentClickListener;
+
+    public BaseExpandedGridViewHolder(View itemView) {
+        super(itemView);
+        this.view = itemView;
+        initWidgets(itemView);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onParentClickListener != null) {
+                    onParentClickListener.onParentClick(getAdapterPosition());
+                }
+            }
+        });
+    }
+
+    public abstract void initWidgets(View view);
 }

@@ -205,11 +205,9 @@
 
 package com.neo.expandedrecyclerview;
 
-import com.neo.expandedrecylerview.core.IExpandData;
+import com.neo.expandedrecylerview.model.IExpandData;
 
-/**
- * Created by matrix on 6/24/2018.
- */
+
 
 public class ChildItemModel implements IExpandData {
     public String getChildName() {

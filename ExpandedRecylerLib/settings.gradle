@@ -1,1 +1,1 @@
-include ':app', ':expandedrecylerview'
+include ':app', ':expandedgridrecylerview'

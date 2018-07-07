@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ExpandedRecylerLib.iml" filepath="$PROJECT_DIR$/ExpandedRecylerLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/expandedrecylerview/expandedrecylerview.iml" filepath="$PROJECT_DIR$/expandedrecylerview/expandedrecylerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/expandedgridrecylerview/expandedgridrecylerview.iml" filepath="$PROJECT_DIR$/expandedgridrecylerview/expandedgridrecylerview.iml" />
     </modules>
   </component>
 </project>

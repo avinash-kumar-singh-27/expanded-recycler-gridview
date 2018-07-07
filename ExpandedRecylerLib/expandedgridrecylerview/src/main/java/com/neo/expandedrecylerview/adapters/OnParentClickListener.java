@@ -203,11 +203,8 @@
  *
  */
 
-package com.neo.expandedrecylerview.core;
+package com.neo.expandedrecylerview.adapters;
 
-/**
- * Created by matrix on 6/23/2018.
- */
-
-public interface IExpandData {
+interface OnParentClickListener {
+    void onParentClick(int position);
 }

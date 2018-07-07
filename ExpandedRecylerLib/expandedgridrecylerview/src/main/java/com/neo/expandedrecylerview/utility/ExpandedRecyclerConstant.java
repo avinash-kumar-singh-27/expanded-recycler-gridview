@@ -203,32 +203,11 @@
  *
  */
 
-package com.neo.expandedrecylerview.adapters;
+package com.neo.expandedrecylerview.utility;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-
-/**
- * Created by matrix on 6/23/2018.
- */
-
-public abstract class BaseExpandedViewHolder extends RecyclerView.ViewHolder {
-    private View view;
-    protected OnParentClickListner onParentClickLisnter;
-
-    public BaseExpandedViewHolder(View itemView) {
-        super(itemView);
-        this.view = itemView;
-        initWidgets(itemView);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onParentClickLisnter != null) {
-                    onParentClickLisnter.onParentClick(getAdapterPosition());
-                }
-            }
-        });
-    }
-
-    public abstract void initWidgets(View view);
+public final class ExpandedRecyclerConstant {
+    private ExpandedRecyclerConstant(){}
+    public static final int CHILD_VIEW_TYPE=1001;
+    public static final int EMPTY_VIEW_TYPE=1002;
+    public static final int PARENT_VIEW_TYPE=1003;
 }
