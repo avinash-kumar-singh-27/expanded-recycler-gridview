@@ -1,7 +1,7 @@
 sudo: false
 language: android
-jdk:
-  - oraclejdk8
+install: ant deps
+
 branches:
   only:
   - master
@@ -22,12 +22,5 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-26
     - sys-img-armeabi-v7a-android-17
-script:
-#- ant clean
-#- ant debug
-#- cd test_client/tests
-#- ant acceptance-test
-#- cd ../..
-- ./gradlew clean build
 
     
