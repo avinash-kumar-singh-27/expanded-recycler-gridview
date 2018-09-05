@@ -1,7 +1,6 @@
 sudo: required
 language: android
-install: ant
-install: ant deps
+jdk: oraclejdk8
 
 branches:
   only:
@@ -27,3 +26,4 @@ android:
     - 'android-sdk-preview-license-52d11cd2'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
+  script: ./gradlew connectedAndroidTest
